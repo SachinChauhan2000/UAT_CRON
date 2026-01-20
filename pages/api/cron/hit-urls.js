@@ -91,15 +91,20 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method not allowed. Use GET or POST' });
   }
 
-  // Verify the cron secret for security
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Unauthorized: Missing or invalid authorization header' });
-  }
+  // Skip authentication for Vercel cron jobs (they include x-vercel-cron-request header)
+  const isVercelCron = req.headers['x-vercel-cron-request'] === 'true';
+  
+  // Only require authentication for non-Vercel cron requests
+  if (!isVercelCron) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'Unauthorized: Missing or invalid authorization header' });
+    }
 
-  const token = authHeader.split(' ')[1];
-  if (token !== process.env.CRON_SECRET) {
-    return res.status(403).json({ message: 'Forbidden: Invalid token' });
+    const token = authHeader.split(' ')[1];
+    if (token !== process.env.CRON_SECRET) {
+      return res.status(403).json({ message: 'Forbidden: Invalid token' });
+    }
   }
 
   // Get scheduleType from query parameters
