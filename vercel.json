@@ -2,32 +2,10 @@
   "crons": [
     {
       "path": "/api/cron/hit-urls",
-      "schedule": "*/30 * * * *",
+      "schedule": "0 0 * * *",
       "method": "POST",
       "body": {
-        "scheduleType": "30min"
-      },
-      "headers": {
-        "Authorization": "Bearer ${process.env.CRON_SECRET}"
-      }
-    },
-    {
-      "path": "/api/cron/hit-urls",
-      "schedule": "0 * * * *",
-      "method": "POST",
-      "body": {
-        "scheduleType": "60min"
-      },
-      "headers": {
-        "Authorization": "Bearer ${process.env.CRON_SECRET}"
-      }
-    },
-    {
-      "path": "/api/cron/hit-urls",
-      "schedule": "30 2 * * *",
-      "method": "POST",
-      "body": {
-        "scheduleType": "morning"
+        "scheduleType": "daily"
       },
       "headers": {
         "Authorization": "Bearer ${process.env.CRON_SECRET}"
