@@ -86,9 +86,9 @@ async function hitMorningUrls() {
 }
 
 export default async function handler(req, res) {
-  // Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+  // Only allow GET and POST requests
+  if (req.method !== 'GET' && req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed. Use GET or POST' });
   }
 
   // Verify the cron secret for security
