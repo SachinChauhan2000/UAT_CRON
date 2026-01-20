@@ -1,0 +1,37 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/hit-urls",
+      "schedule": "*/30 * * * *",
+      "method": "POST",
+      "body": {
+        "scheduleType": "30min"
+      },
+      "headers": {
+        "Authorization": "Bearer ${process.env.CRON_SECRET}"
+      }
+    },
+    {
+      "path": "/api/cron/hit-urls",
+      "schedule": "0 * * * *",
+      "method": "POST",
+      "body": {
+        "scheduleType": "60min"
+      },
+      "headers": {
+        "Authorization": "Bearer ${process.env.CRON_SECRET}"
+      }
+    },
+    {
+      "path": "/api/cron/hit-urls",
+      "schedule": "30 2 * * *",
+      "method": "POST",
+      "body": {
+        "scheduleType": "morning"
+      },
+      "headers": {
+        "Authorization": "Bearer ${process.env.CRON_SECRET}"
+      }
+    }
+  ]
+}
