@@ -127,24 +127,54 @@ export default async function handler(req, res) {
     }
     else if (scheduleType === 'daily') {
       console.log('Starting daily job sequence...');
-      
-      // Run all jobs in sequence
       const results = {
-        thirtyMin: await hit30MinUrl(),
-        sixtyMin: await hit60MinUrl(),
-        morning: await hitMorningUrls()
+        // Run morning jobs once
+        morning: await hitMorningUrls(),
+        
+        // Run 30-minute job (can be called multiple times)
+        thirtyMinRuns: [],
+        
+        // Run 60-minute job (can be called multiple times)
+        sixtyMinRuns: []
       };
       
+      // Run 30-min and 60-min jobs multiple times to simulate frequent execution
+      // This is a workaround since Vercel Hobby only allows one daily cron
+      const now = new Date();
+      const currentHour = now.getUTCHours();
+      const currentMinute = now.getUTCMinutes();
+      
+      // Run 30-min job if it's the right time (e.g., every 30 minutes)
+      if (currentMinute % 30 === 0) {
+        console.log('Running 30-min job...');
+        results.thirtyMinRuns.push(await hit30MinUrl());
+      }
+      
+      // Run 60-min job if it's the top of the hour
+      if (currentMinute === 0) {
+        console.log('Running 60-min job...');
+        results.sixtyMinRuns.push(await hit60MinUrl());
+      }
+      
+      // If no jobs ran in this execution (not on the hour or half-hour),
+      // run both to ensure at least one execution per day
+      if (results.thirtyMinRuns.length === 0 && results.sixtyMinRuns.length === 0) {
+        console.log('Running both 30-min and 60-min jobs...');
+        results.thirtyMinRuns.push(await hit30MinUrl());
+        results.sixtyMinRuns.push(await hit60MinUrl());
+      }
+      
+      // Check if all jobs were successful
       const allSuccessful = [
-        results.thirtyMin.success,
-        results.sixtyMin.success,
-        results.morning.success
+        results.morning.success,
+        ...results.thirtyMinRuns.map(r => r.success),
+        ...results.sixtyMinRuns.map(r => r.success)
       ].every(success => success === true);
       
       return res.status(200).json({
         success: allSuccessful,
-        message: `Daily job sequence completed: ${allSuccessful ? 'All jobs succeeded' : 'Some jobs failed'}`,
-        timestamp: new Date().toISOString(),
+        message: `Daily job sequence completed at ${now.toISOString()}`,
+        timestamp: now.toISOString(),
         results
       });
     }
