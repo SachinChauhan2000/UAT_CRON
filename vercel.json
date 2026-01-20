@@ -1,12 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/cron/hit-urls",
+      "path": "/api/cron/hit-urls?scheduleType=daily",
       "schedule": "0 0 * * *",
-      "method": "POST",
-      "body": {
-        "scheduleType": "daily"
-      },
       "headers": {
         "Authorization": "Bearer ${process.env.CRON_SECRET}"
       }

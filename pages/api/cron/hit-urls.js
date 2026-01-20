@@ -102,7 +102,8 @@ export default async function handler(req, res) {
     return res.status(403).json({ message: 'Forbidden: Invalid token' });
   }
 
-  const { scheduleType } = req.body;
+  // Get scheduleType from query parameters
+  const { scheduleType } = req.query;
   const currentTime = new Date().toISOString();
   console.log(`[${currentTime}] Processing ${scheduleType} job`);
 
