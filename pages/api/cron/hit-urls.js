@@ -30,7 +30,6 @@ async function hitMorningUrls() {
     "http://3.111.163.115/sub-d/import_scheme_master_csv",
     "http://3.111.163.115/sub-d/import_pjp",
     "http://3.111.163.115/sub-d/import_areas_master_csv",
-    "http://3.111.163.115/sub-d/import_batch_master_csv",
     "http://3.111.163.115/sub-d/import_beat_details_csv",
     "http://3.111.163.115/sub-d/import_margin_csv",
     "http://3.111.163.115/sub-d/import_product",
@@ -39,7 +38,8 @@ async function hitMorningUrls() {
     "http://3.111.163.115/sub-d/import_user_master",
     "http://3.111.163.115/sub-d/import_distributor_master_csv",
     "https://prodcampaigns.com/haleonwebapp/check_scheme_eligibility_for_cb_group",
-    "https://prodcampaigns.com/haleonwebapp/check_scheme_eligibility_for_cb_group_cash"
+    "https://prodcampaigns.com/haleonwebapp/check_scheme_eligibility_for_cb_group_cash",
+    "http://3.111.163.115/sub-d/import_batch_master_csv"
   ];
 
   const results = [];
